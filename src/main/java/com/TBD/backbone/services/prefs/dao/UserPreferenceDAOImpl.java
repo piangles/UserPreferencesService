@@ -19,8 +19,8 @@ import com.TBD.core.util.coding.JSON;
 public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreferenceDAO
 {
 	private static final String COMPONENT_ID = "131a693b-a821-4e58-a44e-ddef529ca634";
-	private static final String GET_USER_PREFS_SP = "BackboneTier4.GetUserPreference";
-	private static final String PUT_USER_PREFS_SP = "BackboneTier4.PutUserPreference";
+	private static final String GET_USER_PREFS_SP = "Backbone.GetUserPreference";
+	private static final String PUT_USER_PREFS_SP = "Backbone.PutUserPreference";
 
 	private LoggingService logger = Tier2ServiceLocator.getInstance().getLoggingService();
 	
