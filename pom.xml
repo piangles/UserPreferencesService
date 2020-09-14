@@ -1,57 +1,84 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>app-prefs</artifactId>
+	<groupId>com.TBD.backbone.services</groupId>
+	<artifactId>UserPreferencesService</artifactId>
 	<packaging>jar</packaging>
-	<version>${app-prefs-version}</version>
+	<version>0.1</version>
 
-	<parent>
-		<groupId>com.TBD.backbone.services</groupId>
-		<artifactId>mvn-parent</artifactId>
-		<version>1.0</version>
-		<relativePath>../mvn-parent/pom.xml</relativePath>
-	</parent>
+	<properties>
+		<org.springframework.build.aws-maven-version>5.0.0.RELEASE</org.springframework.build.aws-maven-version>
+		<maven-compiler-plugin-version>3.3</maven-compiler-plugin-version>
+		<maven-dependency-plugin>2.10</maven-dependency-plugin>
+		<java-source-version>1.8</java-source-version>
+		<java-target-version>1.8</java-target-version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.TBD.backbone.services</groupId>
-			<artifactId>idl-prefs</artifactId>
-			<version>${idl-prefs-version}</version>
+			<artifactId>BackBoneServices</artifactId>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.TBD.backbone.services</groupId>
-			<artifactId>impl-prefs</artifactId>
-			<version>${impl-prefs-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.TBD.backbone.services</groupId>
-			<artifactId>mod-tier2-locator</artifactId>
-			<version>${mod-tier2-locator-version}</version>
+			<artifactId>BackBoneServicesLocator</artifactId>
+			<version>0.1</version>
 		</dependency>
 
-		<!--This is required for runtime when configuration for SessionValidator -->
- 		<dependency>
-			<groupId>com.TBD.backbone.services</groupId>
-			<artifactId>idl-session</artifactId>
-			<version>${idl-session-version}</version>
-		</dependency>
 		<dependency>
-			<groupId>com.TBD.backbone.services</groupId>
-			<artifactId>mod-tier0-locator</artifactId>
-			<version>${mod-tier0-locator-version}</version>
+			<groupId>com.TBD.core</groupId>
+			<artifactId>Core</artifactId>
+			<version>0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>piangle-s3-artifact-central</id>
+			<url>s3://piangle-s3-artifact/snapshot</url>
+		</snapshotRepository>
+		<repository>
+			<id>piangle-s3-artifact-release</id>
+			<url>s3://piangle-s3-artifact/release</url>
+		</repository>
+	</distributionManagement>
+
 	<build>
-		<finalName>app-prefs</finalName>
+		<finalName>UserPreferencesService</finalName>
+		
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build</groupId>
+				<artifactId>aws-maven</artifactId>
+				<version>5.0.0.RELEASE</version>
+			</extension>
+		</extensions>
+		
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin-version}</version>
+				<configuration>
+					<source>${java-source-version}</source>
+					<target>${java-target-version}</target>
+				</configuration>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -69,7 +96,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.TBD.backbone.services.prefs.UserPreferenceServiceContainer</mainClass>
+							<mainClass>com.TBD.backbone.services.prefs.UserPreferencesServiceContainer</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -78,7 +105,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${maven-dependency-plugin}</version>
+				<version>3.1.1</version>
 				<executions>
 					<execution>
 						<id>copy-installed</id>
@@ -90,13 +117,13 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>com.TBD.backbone.services</groupId>
-									<artifactId>app-prefs</artifactId>
-									<version>${app-prefs-version}</version>
+									<artifactId>UserPreferencesService</artifactId>
+									<version>0.1</version>
 									<type>jar</type>
 									<classifier>jar-with-dependencies</classifier>
 									<overWrite>true</overWrite>
-									<outputDirectory>../../../Export</outputDirectory>
-									<destFileName>app-prefs.jar</destFileName>
+									<outputDirectory>../Export</outputDirectory>
+									<destFileName>UserPreferencesService.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
