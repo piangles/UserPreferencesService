@@ -2,7 +2,7 @@
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.TBD.backbone.services</groupId>
-	<artifactId>UserPreferencesService</artifactId>
+	<artifactId>UserPreferenceService</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1</version>
 
@@ -58,7 +58,7 @@
 	</distributionManagement>
 
 	<build>
-		<finalName>UserPreferencesService</finalName>
+		<finalName>UserPreferenceService</finalName>
 		
 		<extensions>
 			<extension>
@@ -96,7 +96,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.TBD.backbone.services.prefs.UserPreferencesServiceContainer</mainClass>
+							<mainClass>com.TBD.backbone.services.prefs.UserPreferenceServiceContainer</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -117,13 +117,13 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>com.TBD.backbone.services</groupId>
-									<artifactId>UserPreferencesService</artifactId>
+									<artifactId>UserPreferenceService</artifactId>
 									<version>0.1</version>
 									<type>jar</type>
 									<classifier>jar-with-dependencies</classifier>
 									<overWrite>true</overWrite>
 									<outputDirectory>../Export</outputDirectory>
-									<destFileName>UserPreferencesService.jar</destFileName>
+									<destFileName>UserPreferenceService.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

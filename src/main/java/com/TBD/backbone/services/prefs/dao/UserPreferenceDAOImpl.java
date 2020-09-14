@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.TBD.backbone.services.DefaultConfigProvider;
-import com.TBD.backbone.services.Tier2ServiceLocator;
+import com.TBD.backbone.services.Locator;
+import com.TBD.backbone.services.config.DefaultConfigProvider;
 import com.TBD.backbone.services.logging.LoggingService;
 import com.TBD.backbone.services.prefs.UserPreference;
 import com.TBD.core.dao.DAOException;
@@ -22,13 +22,13 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 	private static final String GET_USER_PREFS_SP = "Backbone.GetUserPreference";
 	private static final String PUT_USER_PREFS_SP = "Backbone.PutUserPreference";
 
-	private LoggingService logger = Tier2ServiceLocator.getInstance().getLoggingService();
+	private LoggingService logger = Locator.getInstance().getLoggingService();
 	
 	private static final String PROPERTIES = "Properties";
 	
 	public UserPreferenceDAOImpl() throws Exception
 	{
-		super.init(ResourceManager.getInstance().getRDBMSDataStore(new DefaultConfigProvider(COMPONENT_ID)));
+		super.init(ResourceManager.getInstance().getRDBMSDataStore(new DefaultConfigProvider("UserPreferences", COMPONENT_ID)));
 	}
 
 	public UserPreference retrieveUserPreference(String userId) throws DAOException

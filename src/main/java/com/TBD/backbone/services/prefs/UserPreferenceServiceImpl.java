@@ -1,6 +1,6 @@
 package com.TBD.backbone.services.prefs;
 
-import com.TBD.backbone.services.Tier2ServiceLocator;
+import com.TBD.backbone.services.Locator;
 import com.TBD.backbone.services.logging.LoggingService;
 import com.TBD.backbone.services.prefs.dao.UserPreferenceDAO;
 import com.TBD.backbone.services.prefs.dao.UserPreferenceDAOImpl;
@@ -8,7 +8,7 @@ import com.TBD.core.dao.DAOException;
 
 public final class UserPreferenceServiceImpl implements UserPreferenceService
 {
-	private LoggingService logger = Tier2ServiceLocator.getInstance().getLoggingService();
+	private LoggingService logger = Locator.getInstance().getLoggingService();
 
 	private UserPreferenceDAO userPreferenceDAO = null;
 	
