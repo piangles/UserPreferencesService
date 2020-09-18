@@ -55,7 +55,10 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 					try
 					{
 						Properties props = JSON.getDecoder().decode(propsAsString.getBytes(), Properties.class);
-						userPref.setProperties(props);
+						if (props != null)
+						{
+							userPref.setProperties(props);
+						}
 					}
 					catch (Exception e)
 					{
