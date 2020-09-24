@@ -1,4 +1,4 @@
-package com.TBD.backbone.services.prefs.dao;
+package org.piangles.backbone.services.prefs.dao;
 
 import com.TBD.backbone.services.prefs.UserPreference;
 import com.TBD.core.dao.DAOException;
