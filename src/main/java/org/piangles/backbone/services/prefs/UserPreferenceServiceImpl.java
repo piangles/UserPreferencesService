@@ -1,10 +1,14 @@
-package com.TBD.backbone.services.prefs;
+package org.piangles.backbone.services.prefs;
 
-import com.TBD.backbone.services.Locator;
-import com.TBD.backbone.services.logging.LoggingService;
-import com.TBD.backbone.services.prefs.dao.UserPreferenceDAO;
-import com.TBD.backbone.services.prefs.dao.UserPreferenceDAOImpl;
-import com.TBD.core.dao.DAOException;
+import org.piangles.backbone.services.prefs.dao.UserPreferenceDAO;
+import org.piangles.backbone.services.prefs.dao.UserPreferenceDAOImpl;
+
+import org.piangles.backbone.services.Locator;
+import org.piangles.backbone.services.logging.LoggingService;
+import org.piangles.backbone.services.prefs.UserPreference;
+import org.piangles.backbone.services.prefs.UserPreferenceException;
+import org.piangles.backbone.services.prefs.UserPreferenceService;
+import org.piangles.core.dao.DAOException;
 
 public final class UserPreferenceServiceImpl implements UserPreferenceService
 {
