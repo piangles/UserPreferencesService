@@ -1,7 +1,5 @@
 package org.piangles.backbone.services.prefs.dao;
 
-import java.sql.CallableStatement;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import org.piangles.backbone.services.Locator;
@@ -10,7 +8,6 @@ import org.piangles.backbone.services.logging.LoggingService;
 import org.piangles.backbone.services.prefs.UserPreference;
 import org.piangles.core.dao.DAOException;
 import org.piangles.core.dao.rdbms.AbstractDAO;
-import org.piangles.core.dao.rdbms.StatementPreparer;
 import org.piangles.core.resources.ResourceManager;
 import org.piangles.core.util.coding.JSON;
 
@@ -31,54 +28,41 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 
 	public UserPreference retrieveUserPreference(String userId) throws DAOException
 	{
-		UserPreference retUserPref = null;
-		UserPreference userPref = new UserPreference();
-
-		super.executeSPQueryProcessComplete(GET_USER_PREFS_SP, 1, (call) -> {
+		UserPreference retUserPref = super.executeSPQuery(GET_USER_PREFS_SP, 1, (call) -> {
 			call.setString(1, userId);
 		}, (rs) -> {
-			if (rs.next())
+			UserPreference userPref = null;
+			String propsAsString = rs.getString(PROPERTIES); 
+			try
 			{
-				String propsAsString = rs.getString(PROPERTIES); 
-				try
+				Properties props = JSON.getDecoder().decode(propsAsString.getBytes(), Properties.class);
+				if (props != null)
 				{
-					Properties props = JSON.getDecoder().decode(propsAsString.getBytes(), Properties.class);
-					if (props != null)
-					{
-						userPref.setProperties(props);
-					}
-				}
-				catch(Exception e)
-				{
-					logger.error("Unable to decode UserPreferences for userId : " + userId + " because of : " + e.getMessage(), e);
+					userPref = new UserPreference(props);
 				}
 			}
+			catch(Exception e)
+			{
+				logger.error("Unable to decode UserPreferences for userId : " + userId + " because of : " + e.getMessage(), e);
+			}
+			return userPref;
 		});
 
-		if (userPref != null && !userPref.isEmpty())
-		{
-			retUserPref = userPref;
-		}
 		return retUserPref;
 	}
 	
 	public void persistUserPreference(String userId, UserPreference prefs) throws DAOException
 	{
-		super.executeSP(PUT_USER_PREFS_SP, 2, new StatementPreparer()
-		{
-			@Override
-			public void prepare(CallableStatement statement) throws SQLException
+		super.executeSP(PUT_USER_PREFS_SP, 2, (statement) -> {
+			statement.setString(1, userId);
+			try
 			{
-				statement.setString(1, userId);
-				try
-				{
-					byte[] propertiesAsJson = JSON.getEncoder().encode(prefs.getProperties());
-					statement.setString(2, new String(propertiesAsJson));
-				}
-				catch (Exception e)
-				{
-					logger.error("Unable to encode UserPreferences for userId : " + userId + " because of : " + e.getMessage(), e);
-				}
+				byte[] propertiesAsJson = JSON.getEncoder().encode(prefs.getProperties());
+				statement.setString(2, new String(propertiesAsJson));
+			}
+			catch (Exception e)
+			{
+				logger.error("Unable to encode UserPreferences for userId : " + userId + " because of : " + e.getMessage(), e);
 			}
 		});
 	}
