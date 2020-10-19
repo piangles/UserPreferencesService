@@ -30,7 +30,7 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 	{
 		UserPreference retUserPref = super.executeSPQuery(GET_USER_PREFS_SP, 1, (call) -> {
 			call.setString(1, userId);
-		}, (rs) -> {
+		}, (rs, call) -> {
 			UserPreference userPref = null;
 			String propsAsString = rs.getString(PROPERTIES); 
 			try
