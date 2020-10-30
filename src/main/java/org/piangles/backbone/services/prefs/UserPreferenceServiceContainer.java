@@ -22,7 +22,7 @@ public class UserPreferenceServiceContainer extends AbstractContainer
 
 	public UserPreferenceServiceContainer()
 	{
-		super("UserPreferenceService");
+		super(UserPreferenceService.NAME);
 	}
 	
 	@Override
