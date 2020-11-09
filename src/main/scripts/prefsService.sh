@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAR_FILE=app-prefs.jar
+JAR_FILE=UserPreferenceService.jar
 PROCESS_NAME=UserPreferenceService
 
 function printUsage {

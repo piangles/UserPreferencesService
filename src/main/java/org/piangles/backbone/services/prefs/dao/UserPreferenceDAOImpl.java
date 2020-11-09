@@ -6,6 +6,7 @@ import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.config.DefaultConfigProvider;
 import org.piangles.backbone.services.logging.LoggingService;
 import org.piangles.backbone.services.prefs.UserPreference;
+import org.piangles.backbone.services.prefs.UserPreferenceService;
 import org.piangles.core.dao.DAOException;
 import org.piangles.core.dao.rdbms.AbstractDAO;
 import org.piangles.core.resources.ResourceManager;
@@ -23,7 +24,8 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 	
 	public UserPreferenceDAOImpl() throws Exception
 	{
-		super.init(ResourceManager.getInstance().getRDBMSDataStore(new DefaultConfigProvider("UserPreferences", COMPONENT_ID)));
+		//UserPreferenceService.NAME is different need to fix this
+		super.init(ResourceManager.getInstance().getRDBMSDataStore(new DefaultConfigProvider(UserPreferenceService.NAME, COMPONENT_ID)));
 	}
 
 	public UserPreference retrieveUserPreference(String userId) throws DAOException
@@ -48,6 +50,7 @@ public class UserPreferenceDAOImpl extends AbstractDAO implements UserPreference
 			return userPref;
 		});
 
+		//Incorporate AddendumPreferences table
 		return retUserPref;
 	}
 	

@@ -11,7 +11,7 @@ public class UserPreferenceServiceContainer extends AbstractContainer
 		UserPreferenceServiceContainer container = new UserPreferenceServiceContainer();
 		try
 		{
-			container.performSteps();
+			container.performSteps(args);
 		}
 		catch (ContainerException e)
 		{
