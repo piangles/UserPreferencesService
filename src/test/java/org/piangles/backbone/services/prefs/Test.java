@@ -13,7 +13,14 @@ public class Test
 {
 	public static void main(String[] args) throws Exception
 	{
-		UserPreference prefs = createDefaultProperties();
+		Object value = null;
+		
+		if (value instanceof Object[])
+		{
+			System.out.println("NullPointerException");
+		}
+		
+		UserPreference prefs = new UserPreference("", null);//createDefaultProperties();
 		for (Entry<Object, Object> es: prefs.getProperties().entrySet())
 		{
 			if (es.getValue() instanceof Object[])

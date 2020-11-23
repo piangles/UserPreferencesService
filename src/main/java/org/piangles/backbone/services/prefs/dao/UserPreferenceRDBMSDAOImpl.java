@@ -75,6 +75,10 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 					}
 					userPref = new UserPreference(userId, props);
 				}
+				else
+				{
+					userPref = new UserPreference(userId);
+				}
 			}
 			catch(Exception e)
 			{

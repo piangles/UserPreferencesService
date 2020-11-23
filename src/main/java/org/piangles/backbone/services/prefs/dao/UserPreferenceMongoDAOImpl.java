@@ -54,6 +54,10 @@ public class UserPreferenceMongoDAOImpl extends AbstractDAO<UserPreference> impl
 			}
 			prefs = new UserPreference(userId, props);
 		}
+		else
+		{
+			prefs = new UserPreference(userId);
+		}
 
 		return prefs;
 	}

@@ -37,6 +37,26 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 	}
 	
 	@Override
+	public void persistUserPreference(String userId, UserPreference prefs) throws UserPreferenceException
+	{
+		try
+		{
+			logger.info("Persisting UserPreferences for : " + userId);
+			if (prefs == null)
+			{
+				prefs = new UserPreference(userId);
+			}
+			userPreferenceDAO.persistUserPreference(prefs);
+		}
+		catch (DAOException e)
+		{
+			String message = "Faied persisting UserPreferences for : " + userId + " because of : " + e.getMessage();
+			logger.error(message, e);
+			throw new UserPreferenceException(message);
+		}
+	}
+
+	@Override
 	public UserPreference retrieveUserPreference(String userId) throws UserPreferenceException
 	{
 		UserPreference userPreference = null;
@@ -52,21 +72,5 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 			throw new UserPreferenceException(message);
 		}
 		return userPreference;
-	}
-
-	@Override
-	public void persistUserPreference(String userId, UserPreference prefs) throws UserPreferenceException
-	{
-		try
-		{
-			logger.info("Persisting UserPreferences for : " + userId);
-			userPreferenceDAO.persistUserPreference(prefs);
-		}
-		catch (DAOException e)
-		{
-			String message = "Faied persisting UserPreferences for : " + userId + " because of : " + e.getMessage();
-			logger.error(message, e);
-			throw new UserPreferenceException(message);
-		}
 	}
 }
