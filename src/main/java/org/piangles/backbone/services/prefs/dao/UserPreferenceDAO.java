@@ -7,6 +7,6 @@ public interface UserPreferenceDAO
 {
 	public UserPreference retrieveUserPreference(String userId) throws DAOException;
 	
-	public void persistUserPreference(String userId, UserPreference prefs) throws DAOException;
+	public void persistUserPreference(UserPreference prefs) throws DAOException;
 
 }

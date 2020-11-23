@@ -1,0 +1,89 @@
+package org.piangles.backbone.services.prefs.dao;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
+import org.piangles.backbone.services.Locator;
+import org.piangles.backbone.services.logging.LoggingService;
+import org.piangles.backbone.services.prefs.UserPreference;
+import org.piangles.core.dao.DAOException;
+import org.piangles.core.dao.rdbms.AbstractDAO;
+import org.piangles.core.resources.ResourceManager;
+import org.piangles.core.util.abstractions.ConfigProvider;
+import org.piangles.core.util.coding.JSON;
+
+public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPreferenceDAO
+{
+	private static final String ARRAY_DELIMITER = "|";
+	private static final String GET_USER_PREFS_SP = "Backbone.GetUserPreference";
+	private static final String PUT_USER_PREFS_SP = "Backbone.PutUserPreference";
+
+	private LoggingService logger = Locator.getInstance().getLoggingService();
+	
+	private static final String PROPERTIES = "Properties";
+	
+	public UserPreferenceRDBMSDAOImpl(ConfigProvider cp) throws Exception
+	{
+		//UserPreferenceService.NAME is different need to fix this
+		super.init(ResourceManager.getInstance().getRDBMSDataStore(cp));
+	}
+
+	public void persistUserPreference(UserPreference prefs) throws DAOException
+	{
+		super.executeSP(PUT_USER_PREFS_SP, 2, (statement) -> {
+			statement.setString(1, prefs.getUserId());
+			try
+			{
+				for (Entry<Object, Object> es: prefs.getProperties().entrySet())
+				{
+					if (es.getValue() instanceof Object[])
+					{
+						List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
+						es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
+					}
+				}
+				
+				byte[] propertiesAsJson = JSON.getEncoder().encode(prefs.getProperties());
+				statement.setString(2, new String(propertiesAsJson));
+			}
+			catch (Exception e)
+			{
+				logger.error("Unable to encode UserPreferences for userId : " + prefs.getUserId() + " because of : " + e.getMessage(), e);
+			}
+		});
+	}
+
+	public UserPreference retrieveUserPreference(String userId) throws DAOException
+	{
+		UserPreference retUserPref = super.executeSPQuery(GET_USER_PREFS_SP, 1, (call) -> {
+			call.setString(1, userId);
+		}, (rs, call) -> {
+			UserPreference userPref = null;
+			String propsAsString = rs.getString(PROPERTIES); 
+			try
+			{
+				Properties props = JSON.getDecoder().decode(propsAsString.getBytes(), Properties.class);
+				if (props != null)
+				{
+					for (Entry<Object, Object> es: props.entrySet())
+					{
+						String valueAsStr = (String)es.getValue();
+						es.setValue(valueAsStr.split("|"));
+					}
+					userPref = new UserPreference(userId, props);
+				}
+			}
+			catch(Exception e)
+			{
+				logger.error("Unable to decode UserPreferences for userId : " + userId + " because of : " + e.getMessage(), e);
+			}
+			return userPref;
+		});
+
+		//TODO Incorporate AddendumPreferences table
+		return retUserPref;
+	}
+}
