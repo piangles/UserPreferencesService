@@ -13,15 +13,8 @@ public class Test
 {
 	public static void main(String[] args) throws Exception
 	{
-		Object value = null;
-		
-		if (value instanceof Object[])
-		{
-			System.out.println("NullPointerException");
-		}
-		
 		UserPreference prefs = new UserPreference("", null);//createDefaultProperties();
-		for (Entry<Object, Object> es: prefs.getProperties().entrySet())
+		for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 		{
 			if (es.getValue() instanceof Object[])
 			{
@@ -33,7 +26,7 @@ public class Test
 		System.out.println(new String(propertiesAsJson));
 
 		prefs = JSON.getDecoder().decode(propertiesAsJson, UserPreference.class);
-		for (Entry<Object, Object> es: prefs.getProperties().entrySet())
+		for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 		{
 			String valueAsStr = (String)es.getValue();
 			es.setValue(valueAsStr.split("|"));
@@ -50,7 +43,7 @@ public class Test
 		preferedSectors.add(sectors[start]);
 		preferedSectors.add(sectors[start + 1]);
 		
-		prefs.getProperties().put("PreferedSectors", preferedSectors.toArray());
+		prefs.getNVPair().put("PreferedSectors", preferedSectors.toArray());
 		return prefs;
 	}
 }

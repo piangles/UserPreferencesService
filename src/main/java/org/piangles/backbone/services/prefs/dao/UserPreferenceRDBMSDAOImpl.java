@@ -1,10 +1,7 @@
 package org.piangles.backbone.services.prefs.dao;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.logging.LoggingService;
@@ -17,7 +14,6 @@ import org.piangles.core.util.coding.JSON;
 
 public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPreferenceDAO
 {
-	private static final String ARRAY_DELIMITER = "|";
 	private static final String GET_USER_PREFS_SP = "Backbone.GetUserPreference";
 	private static final String PUT_USER_PREFS_SP = "Backbone.PutUserPreference";
 
@@ -37,16 +33,7 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 			statement.setString(1, prefs.getUserId());
 			try
 			{
-				for (Entry<Object, Object> es: prefs.getProperties().entrySet())
-				{
-					if (es.getValue() instanceof Object[])
-					{
-						List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
-						es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
-					}
-				}
-				
-				byte[] propertiesAsJson = JSON.getEncoder().encode(prefs.getProperties());
+				byte[] propertiesAsJson = JSON.getEncoder().encode(prefs.getNVPair());
 				statement.setString(2, new String(propertiesAsJson));
 			}
 			catch (Exception e)
@@ -62,23 +49,15 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 			call.setString(1, userId);
 		}, (rs, call) -> {
 			UserPreference userPref = null;
-			String propsAsString = rs.getString(PROPERTIES); 
+			String nvPairAsString = rs.getString(PROPERTIES); 
 			try
 			{
-				Properties props = JSON.getDecoder().decode(propsAsString.getBytes(), Properties.class);
-				if (props != null)
+				Map<String, Object> nvPair = null;
+				if (nvPairAsString != null)
 				{
-					for (Entry<Object, Object> es: props.entrySet())
-					{
-						String valueAsStr = (String)es.getValue();
-						es.setValue(valueAsStr.split("|"));
-					}
-					userPref = new UserPreference(userId, props);
+					nvPair = JSON.getDecoder().decode(nvPairAsString.getBytes(), Properties.class);
 				}
-				else
-				{
-					userPref = new UserPreference(userId);
-				}
+				userPref = new UserPreference(userId, nvPair);
 			}
 			catch(Exception e)
 			{

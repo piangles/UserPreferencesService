@@ -1,6 +1,10 @@
 package org.piangles.backbone.services.prefs;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.config.DefaultConfigProvider;
@@ -13,6 +17,8 @@ import org.piangles.core.util.abstractions.ConfigProvider;
 
 public final class UserPreferenceServiceImpl implements UserPreferenceService
 {
+	private static final String ARRAY_DELIMITER = "|";
+
 	private static final String COMPONENT_ID = "131a693b-a821-4e58-a44e-ddef529ca634";
 	private static final String DEFAULT_DAO_TYPE = "NoSql";
 	private static final String DAO_TYPE = "DAOType";
@@ -42,10 +48,19 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 		try
 		{
 			logger.info("Persisting UserPreferences for : " + userId);
-			if (prefs == null)
+			if (prefs == null || prefs.getNVPair() == null)
 			{
 				prefs = new UserPreference(userId);
 			}
+			for (Entry<String, Object> es: prefs.getNVPair().entrySet())
+			{
+				if (es.getValue() instanceof Object[])
+				{
+					List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
+					es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
+				}
+			}
+
 			userPreferenceDAO.persistUserPreference(prefs);
 		}
 		catch (DAOException e)
@@ -64,6 +79,28 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 		{
 			logger.info("Retriving UserPreferences for : " + userId);
 			userPreference = userPreferenceDAO.retrieveUserPreference(userId);
+			System.out.println("userPreference:::" + userPreference);
+			if (userPreference == null || userPreference.getNVPair() == null)
+			{
+				userPreference = new UserPreference(userId);
+				/**
+				 * Without the below, the object when encoded to JSON 
+				 * will return a null NVPair instead of creating an
+				 * Map with no values.
+				 */
+				userPreference.setValue("PiAngles.Seeding", "SampleValue");
+			}
+			else
+			{
+				for (Entry<String, Object> es: userPreference.getNVPair().entrySet())
+				{
+					String valueAsStr = (String)es.getValue();
+					if (valueAsStr.indexOf(ARRAY_DELIMITER) != -1)
+					{
+						es.setValue(valueAsStr.split(ARRAY_DELIMITER));
+					}
+				}
+			}
 		}
 		catch (DAOException e)
 		{
