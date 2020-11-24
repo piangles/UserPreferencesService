@@ -39,7 +39,7 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 		{
 			userPreferenceDAO = new UserPreferenceRDBMSDAOImpl(cp); 
 		}
-		System.out.println("Starting UserPreferenceService with DAO: " + userPreferenceDAO.getClass());
+		logger.info("Starting UserPreferenceService with DAO: " + userPreferenceDAO.getClass());
 	}
 	
 	@Override
@@ -57,7 +57,8 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 				if (es.getValue() instanceof Object[])
 				{
 					List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
-					es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
+					//es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
+					es.setValue(listAsStr);
 				}
 			}
 
@@ -79,7 +80,6 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 		{
 			logger.info("Retriving UserPreferences for : " + userId);
 			userPreference = userPreferenceDAO.retrieveUserPreference(userId);
-			System.out.println("userPreference:::" + userPreference);
 			if (userPreference == null || userPreference.getNVPair() == null)
 			{
 				userPreference = new UserPreference(userId);
@@ -94,10 +94,14 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 			{
 				for (Entry<String, Object> es: userPreference.getNVPair().entrySet())
 				{
-					String valueAsStr = (String)es.getValue();
-					if (valueAsStr.indexOf(ARRAY_DELIMITER) != -1)
+					Object value = es.getValue();
+					if (value instanceof String && ((String)value).indexOf(ARRAY_DELIMITER) != -1)
 					{
-						es.setValue(valueAsStr.split(ARRAY_DELIMITER));
+						/**
+						 * Need to espcae it as it is taken as regex
+						 * Convert to ArrayList  
+						 */
+						es.setValue(Arrays.asList(((String)value).split("\\" + ARRAY_DELIMITER)));
 					}
 				}
 			}
