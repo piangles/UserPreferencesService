@@ -2,8 +2,8 @@ package org.piangles.backbone.services.prefs;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.piangles.backbone.services.Locator;
@@ -17,8 +17,6 @@ import org.piangles.core.util.abstractions.ConfigProvider;
 
 public final class UserPreferenceServiceImpl implements UserPreferenceService
 {
-	private static final String ARRAY_DELIMITER = "|";
-
 	private static final String COMPONENT_ID = "131a693b-a821-4e58-a44e-ddef529ca634";
 	private static final String DEFAULT_DAO_TYPE = "NoSql";
 	private static final String DAO_TYPE = "DAOType";
@@ -57,7 +55,6 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 				if (es.getValue() instanceof Object[])
 				{
 					List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
-					//es.setValue(String.join(ARRAY_DELIMITER, listAsStr));
 					es.setValue(listAsStr);
 				}
 			}
@@ -89,21 +86,6 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 				 * Map with no values.
 				 */
 				userPreference.setValue("PiAngles.Seeding", "SampleValue");
-			}
-			else
-			{
-				for (Entry<String, Object> es: userPreference.getNVPair().entrySet())
-				{
-					Object value = es.getValue();
-					if (value instanceof String && ((String)value).indexOf(ARRAY_DELIMITER) != -1)
-					{
-						/**
-						 * Need to espcae it as it is taken as regex
-						 * Convert to ArrayList  
-						 */
-						es.setValue(Arrays.asList(((String)value).split("\\" + ARRAY_DELIMITER)));
-					}
-				}
 			}
 		}
 		catch (DAOException e)

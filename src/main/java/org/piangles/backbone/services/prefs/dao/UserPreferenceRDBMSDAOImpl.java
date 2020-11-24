@@ -1,7 +1,6 @@
 package org.piangles.backbone.services.prefs.dao;
 
 import java.util.Map;
-import java.util.Properties;
 
 import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.logging.LoggingService;
@@ -23,7 +22,6 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 	
 	public UserPreferenceRDBMSDAOImpl(ConfigProvider cp) throws Exception
 	{
-		//UserPreferenceService.NAME is different need to fix this
 		super.init(ResourceManager.getInstance().getRDBMSDataStore(cp));
 	}
 
@@ -55,7 +53,7 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 				Map<String, Object> nvPair = null;
 				if (nvPairAsString != null)
 				{
-					nvPair = JSON.getDecoder().decode(nvPairAsString.getBytes(), Properties.class);
+					nvPair = JSON.getDecoder().decode(nvPairAsString.getBytes(), Map.class);
 				}
 				userPref = new UserPreference(userId, nvPair);
 			}
