@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import org.piangles.core.util.coding.JSON;
 
-public class Test
+public class UserPreferencesEncodingTest
 {
 	public static void main(String[] args) throws Exception
 	{
