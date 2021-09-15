@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<version>0.1</version>
 
-	<name>User Preferences Service</name>
+	<name>User Preference Service</name>
 	<properties>
 		<org.springframework.build.aws-maven-version>5.0.0.RELEASE</org.springframework.build.aws-maven-version>
 
