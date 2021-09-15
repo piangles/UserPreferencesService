@@ -23,11 +23,11 @@ import org.piangles.core.email.EmailSupport;
 import org.piangles.core.services.remoting.AbstractContainer;
 import org.piangles.core.services.remoting.ContainerException;
 
-public class UserPreferenceServiceContainer extends AbstractContainer
+public class UserPreferencesServiceContainer extends AbstractContainer
 {
 	public static void main(String[] args)
 	{
-		UserPreferenceServiceContainer container = new UserPreferenceServiceContainer();
+		UserPreferencesServiceContainer container = new UserPreferencesServiceContainer();
 		try
 		{
 			container.performSteps(args);
@@ -39,9 +39,9 @@ public class UserPreferenceServiceContainer extends AbstractContainer
 		}
 	}
 
-	public UserPreferenceServiceContainer()
+	public UserPreferencesServiceContainer()
 	{
-		super(UserPreferenceService.NAME);
+		super(UserPreferencesService.NAME);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class UserPreferenceServiceContainer extends AbstractContainer
 		Object service = null;
 		try
 		{
-			service = new UserPreferenceServiceImpl();
+			service = new UserPreferencesServiceImpl();
 		}
 		catch (Exception e)
 		{

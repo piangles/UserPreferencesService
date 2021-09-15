@@ -32,7 +32,7 @@ public class UserPreferencesEncodingTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		UserPreference prefs = new UserPreference("", null);//createDefaultProperties();
+		UserPreferences prefs = new UserPreferences("", null);//createDefaultProperties();
 		for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 		{
 			if (es.getValue() instanceof Object[])
@@ -44,7 +44,7 @@ public class UserPreferencesEncodingTest
 		byte[] propertiesAsJson = JSON.getEncoder().encode(prefs);
 		System.out.println(new String(propertiesAsJson));
 
-		prefs = JSON.getDecoder().decode(propertiesAsJson, UserPreference.class);
+		prefs = JSON.getDecoder().decode(propertiesAsJson, UserPreferences.class);
 		for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 		{
 			String valueAsStr = (String)es.getValue();
@@ -52,10 +52,10 @@ public class UserPreferencesEncodingTest
 		}
 	}
 	
-	private static UserPreference createDefaultProperties()
+	private static UserPreferences createDefaultProperties()
 	{
 		String[] sectors = new String[]{"Technology", "Finance", "Energy", "Biotech", "Airlines"};
-		UserPreference prefs = new UserPreference("userId");
+		UserPreferences prefs = new UserPreferences("userId");
 		List<String> preferedSectors = new ArrayList<>();
 
 		int start = new Random().nextInt(4);

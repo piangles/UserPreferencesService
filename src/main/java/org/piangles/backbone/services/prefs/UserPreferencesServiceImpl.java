@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.config.DefaultConfigProvider;
 import org.piangles.backbone.services.logging.LoggingService;
-import org.piangles.backbone.services.prefs.dao.UserPreferenceDAO;
-import org.piangles.backbone.services.prefs.dao.UserPreferenceMongoDAOImpl;
-import org.piangles.backbone.services.prefs.dao.UserPreferenceRDBMSDAOImpl;
+import org.piangles.backbone.services.prefs.dao.UserPreferencesDAO;
+import org.piangles.backbone.services.prefs.dao.UserPreferencesMongoDAOImpl;
+import org.piangles.backbone.services.prefs.dao.UserPreferencesRDBMSDAOImpl;
 import org.piangles.core.dao.DAOException;
 import org.piangles.core.util.abstractions.ConfigProvider;
 
-public final class UserPreferenceServiceImpl implements UserPreferenceService
+public final class UserPreferencesServiceImpl implements UserPreferencesService
 {
 	private static final String COMPONENT_ID = "131a693b-a821-4e58-a44e-ddef529ca634";
 	private static final String DEFAULT_DAO_TYPE = "NoSql";
@@ -42,32 +42,32 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 
 	private LoggingService logger = Locator.getInstance().getLoggingService();
 
-	private UserPreferenceDAO userPreferenceDAO = null;
+	private UserPreferencesDAO userPreferencesDAO = null;
 	
-	public UserPreferenceServiceImpl() throws Exception
+	public UserPreferencesServiceImpl() throws Exception
 	{
-		ConfigProvider cp = new DefaultConfigProvider(UserPreferenceService.NAME, COMPONENT_ID);
+		ConfigProvider cp = new DefaultConfigProvider(UserPreferencesService.NAME, COMPONENT_ID);
 		Properties props = cp.getProperties();
 		if (DEFAULT_DAO_TYPE.equals(props.getProperty(DAO_TYPE)))
 		{
-			userPreferenceDAO = new UserPreferenceMongoDAOImpl(cp); 
+			userPreferencesDAO = new UserPreferencesMongoDAOImpl(cp); 
 		}
 		else
 		{
-			userPreferenceDAO = new UserPreferenceRDBMSDAOImpl(cp); 
+			userPreferencesDAO = new UserPreferencesRDBMSDAOImpl(cp); 
 		}
-		logger.info("Starting UserPreferenceService with DAO: " + userPreferenceDAO.getClass());
+		logger.info("Starting UserPreferenceService with DAO: " + userPreferencesDAO.getClass());
 	}
 	
 	@Override
-	public void persistUserPreference(String userId, UserPreference prefs) throws UserPreferenceException
+	public void persistUserPreference(String userId, UserPreferences prefs) throws UserPreferencesException
 	{
 		try
 		{
 			logger.info("Persisting UserPreferences for : " + userId);
 			if (prefs == null || prefs.getNVPair() == null)
 			{
-				prefs = new UserPreference(userId);
+				prefs = new UserPreferences(userId);
 			}
 			for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 			{
@@ -78,27 +78,27 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 				}
 			}
 
-			userPreferenceDAO.persistUserPreference(prefs);
+			userPreferencesDAO.persistUserPreferences(prefs);
 		}
 		catch (DAOException e)
 		{
 			String message = "Faied persisting UserPreferences for : " + userId + " because of : " + e.getMessage();
 			logger.error(message, e);
-			throw new UserPreferenceException(message);
+			throw new UserPreferencesException(message);
 		}
 	}
 
 	@Override
-	public UserPreference retrieveUserPreference(String userId) throws UserPreferenceException
+	public UserPreferences retrieveUserPreference(String userId) throws UserPreferencesException
 	{
-		UserPreference userPreference = null;
+		UserPreferences userPreference = null;
 		try
 		{
 			logger.info("Retriving UserPreferences for : " + userId);
-			userPreference = userPreferenceDAO.retrieveUserPreference(userId);
+			userPreference = userPreferencesDAO.retrieveUserPreferences(userId);
 			if (userPreference == null || userPreference.getNVPair() == null)
 			{
-				userPreference = new UserPreference(userId);
+				userPreference = new UserPreferences(userId);
 				/**
 				 * Without the below, the object when encoded to JSON 
 				 * will return a null NVPair instead of creating an
@@ -111,7 +111,7 @@ public final class UserPreferenceServiceImpl implements UserPreferenceService
 		{
 			String message = "Faied retriving UserPreferences for : " + userId + " because of : " + e.getMessage();
 			logger.error(message, e);
-			throw new UserPreferenceException(message);
+			throw new UserPreferencesException(message);
 		}
 		return userPreference;
 	}

@@ -19,13 +19,13 @@
  
 package org.piangles.backbone.services.prefs.dao;
 
-import org.piangles.backbone.services.prefs.UserPreference;
+import org.piangles.backbone.services.prefs.UserPreferences;
 import org.piangles.core.dao.DAOException;
 
-public interface UserPreferenceDAO
+public interface UserPreferencesDAO
 {
-	public UserPreference retrieveUserPreference(String userId) throws DAOException;
+	public UserPreferences retrieveUserPreferences(String userId) throws DAOException;
 	
-	public void persistUserPreference(UserPreference prefs) throws DAOException;
+	public void persistUserPreferences(UserPreferences prefs) throws DAOException;
 
 }

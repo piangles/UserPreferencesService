@@ -23,14 +23,14 @@ import java.util.Map;
 
 import org.piangles.backbone.services.Locator;
 import org.piangles.backbone.services.logging.LoggingService;
-import org.piangles.backbone.services.prefs.UserPreference;
+import org.piangles.backbone.services.prefs.UserPreferences;
 import org.piangles.core.dao.DAOException;
 import org.piangles.core.dao.rdbms.AbstractDAO;
 import org.piangles.core.resources.ResourceManager;
 import org.piangles.core.util.abstractions.ConfigProvider;
 import org.piangles.core.util.coding.JSON;
 
-public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPreferenceDAO
+public class UserPreferencesRDBMSDAOImpl extends AbstractDAO implements UserPreferencesDAO
 {
 	private static final String GET_USER_PREFS_SP = "users.get_user_preference";
 	private static final String PUT_USER_PREFS_SP = "users.put_user_preference";
@@ -39,12 +39,12 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 	
 	private static final String PROPERTIES = "properties";
 	
-	public UserPreferenceRDBMSDAOImpl(ConfigProvider cp) throws Exception
+	public UserPreferencesRDBMSDAOImpl(ConfigProvider cp) throws Exception
 	{
 		super.init(ResourceManager.getInstance().getRDBMSDataStore(cp));
 	}
 
-	public void persistUserPreference(UserPreference prefs) throws DAOException
+	public void persistUserPreferences(UserPreferences prefs) throws DAOException
 	{
 		super.executeSP(PUT_USER_PREFS_SP, 2, (statement) -> {
 			statement.setString(1, prefs.getUserId());
@@ -60,12 +60,12 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 		});
 	}
 
-	public UserPreference retrieveUserPreference(String userId) throws DAOException
+	public UserPreferences retrieveUserPreferences(String userId) throws DAOException
 	{
-		UserPreference retUserPref = super.executeSPQuery(GET_USER_PREFS_SP, 1, (call) -> {
+		UserPreferences retUserPref = super.executeSPQuery(GET_USER_PREFS_SP, 1, (call) -> {
 			call.setString(1, userId);
 		}, (rs, call) -> {
-			UserPreference userPref = null;
+			UserPreferences userPref = null;
 			String nvPairAsString = rs.getString(PROPERTIES); 
 			try
 			{
@@ -74,7 +74,7 @@ public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPrefe
 				{
 					nvPair = JSON.getDecoder().decode(nvPairAsString.getBytes(), Map.class);
 				}
-				userPref = new UserPreference(userId, nvPair);
+				userPref = new UserPreferences(userId, nvPair);
 			}
 			catch(Exception e)
 			{
