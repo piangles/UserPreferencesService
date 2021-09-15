@@ -32,12 +32,12 @@ import org.piangles.core.util.coding.JSON;
 
 public class UserPreferenceRDBMSDAOImpl extends AbstractDAO implements UserPreferenceDAO
 {
-	private static final String GET_USER_PREFS_SP = "Backbone.GetUserPreference";
-	private static final String PUT_USER_PREFS_SP = "Backbone.PutUserPreference";
+	private static final String GET_USER_PREFS_SP = "users.get_user_preference";
+	private static final String PUT_USER_PREFS_SP = "users.put_user_preference";
 
 	private LoggingService logger = Locator.getInstance().getLoggingService();
 	
-	private static final String PROPERTIES = "Properties";
+	private static final String PROPERTIES = "properties";
 	
 	public UserPreferenceRDBMSDAOImpl(ConfigProvider cp) throws Exception
 	{
