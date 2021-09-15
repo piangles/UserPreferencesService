@@ -60,7 +60,7 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 	}
 	
 	@Override
-	public void persistUserPreference(String userId, UserPreferences prefs) throws UserPreferencesException
+	public void persistUserPreferences(String userId, UserPreferences prefs) throws UserPreferencesException
 	{
 		try
 		{
@@ -89,7 +89,7 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 	}
 
 	@Override
-	public UserPreferences retrieveUserPreference(String userId) throws UserPreferencesException
+	public UserPreferences retrieveUserPreferences(String userId) throws UserPreferencesException
 	{
 		UserPreferences userPreference = null;
 		try

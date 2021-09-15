@@ -32,8 +32,8 @@ import org.piangles.core.util.coding.JSON;
 
 public class UserPreferencesRDBMSDAOImpl extends AbstractDAO implements UserPreferencesDAO
 {
-	private static final String GET_USER_PREFS_SP = "users.get_user_preference";
-	private static final String PUT_USER_PREFS_SP = "users.put_user_preference";
+	private static final String GET_USER_PREFS_SP = "users.get_user_preferences";
+	private static final String PUT_USER_PREFS_SP = "users.put_user_preferences";
 
 	private LoggingService logger = Locator.getInstance().getLoggingService();
 	
