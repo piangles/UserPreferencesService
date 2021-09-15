@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<version>0.1</version>
 
-	<name>User Preference Service</name>
+	<name>User Preferences Service</name>
 	<properties>
 		<org.springframework.build.aws-maven-version>5.0.0.RELEASE</org.springframework.build.aws-maven-version>
 
@@ -24,12 +24,12 @@
 		<dependency>
 			<groupId>org.piangles.backbone.services</groupId>
 			<artifactId>BackBoneServices</artifactId>
-			<version>0.6</version>
+			<version>0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.piangles.backbone.services</groupId>
 			<artifactId>BackBoneServicesLocator</artifactId>
-			<version>0.7</version>
+			<version>0.9</version>
 		</dependency>
 
 		<dependency>
@@ -86,13 +86,13 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>org.piangles.backbone.services.prefs.UserPreferenceServiceContainer</mainClass>
+									<mainClass>org.piangles.backbone.services.prefs.UserPreferencesServiceContainer</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>UserPreferenceService</finalName>
+							<finalName>UserPreferencesService</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
