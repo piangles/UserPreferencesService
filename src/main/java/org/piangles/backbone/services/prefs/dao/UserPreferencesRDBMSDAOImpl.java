@@ -66,7 +66,7 @@ public class UserPreferencesRDBMSDAOImpl extends AbstractDAO implements UserPref
 			call.setString(1, userId);
 		}, (rs, call) -> {
 			UserPreferences userPref = null;
-			String nvPairAsString = rs.getString(PROPERTIES); 
+			String nvPairAsString = rs.getString(1); 
 			try
 			{
 				Map<String, Object> nvPair = null;
