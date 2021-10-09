@@ -82,8 +82,8 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 		}
 		catch (DAOException e)
 		{
-			String message = "Faied persisting UserPreferences for : " + userId + " because of : " + e.getMessage();
-			logger.error(message, e);
+			String message = "Faied persisting UserPreferences for UserId: " + userId;
+			logger.error(message + ". Reason: " + e.getMessage(), e);
 			throw new UserPreferencesException(message);
 		}
 	}
@@ -109,8 +109,8 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 		}
 		catch (DAOException e)
 		{
-			String message = "Faied retriving UserPreferences for : " + userId + " because of : " + e.getMessage();
-			logger.error(message, e);
+			String message = "Faied retriving UserPreferences for UserId: " + userId;
+			logger.error(message + ". Reason: " + e.getMessage(), e);
 			throw new UserPreferencesException(message);
 		}
 		return userPreference;
