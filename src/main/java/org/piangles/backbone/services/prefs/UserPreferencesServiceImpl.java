@@ -104,7 +104,7 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 				 * will return a null NVPair instead of creating an
 				 * Map with no values.
 				 */
-				userPreference.setValue("PiAngles.Seeding", "SampleValue");
+				userPreference.setValue("PiAngles-Seeding", "SampleValue");
 			}
 		}
 		catch (DAOException e)
