@@ -38,7 +38,8 @@ public class UserPreferencesAuditImpl implements UserPreferencesAudit
 		logger.info("Performing UsePreferences object audit for userId: " + userPreferences.getUserId());
 		try 
 		{
-			javers.commit(AUTHOR, userPreferences);
+			AuditableUserPreferences auditRecord = new AuditableUserPreferences(userPreferences.getUserId(), userPreferences);
+			javers.commit(AUTHOR, auditRecord);
 		} 
 		catch (Exception e) 
 		{
