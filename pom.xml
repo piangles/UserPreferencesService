@@ -44,7 +44,24 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>3.12.7</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.javers</groupId>
+			<artifactId>javers-core</artifactId>
+			<version>5.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javers</groupId>
+			<artifactId>javers-persistence-mongo</artifactId>
+			<version>5.9.4</version>
+				<exclusions>
+	                <exclusion>
+	                    <groupId>org.mongodb</groupId>
+	                    <artifactId>mongodb-driver</artifactId>
+	                </exclusion>
+	            </exclusions>
+		</dependency>
+	
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

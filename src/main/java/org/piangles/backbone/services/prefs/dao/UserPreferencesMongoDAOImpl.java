@@ -23,8 +23,11 @@ import java.util.Map;
 
 import org.bson.Document;
 import org.piangles.backbone.services.prefs.UserPreferences;
+import org.piangles.backbone.services.prefs.audit.UserPreferencesAudit;
+import org.piangles.backbone.services.prefs.audit.UserPreferencesAuditImpl;
 import org.piangles.core.dao.DAOException;
 import org.piangles.core.dao.nosql.AbstractDAO;
+import org.piangles.core.resources.MongoDataStore;
 import org.piangles.core.resources.ResourceManager;
 import org.piangles.core.util.abstractions.ConfigProvider;
 
@@ -37,9 +40,14 @@ public class UserPreferencesMongoDAOImpl extends AbstractDAO<UserPreferences> im
 	private static final String USER_ID = "userId";
 	private static final String NV_PAIR = "nvPair";
 	
+	private UserPreferencesAudit userPreferencesAudit = null;
+	
 	public UserPreferencesMongoDAOImpl(ConfigProvider cp) throws Exception
 	{
-		super.init(ResourceManager.getInstance().getMongoDataStore(cp));
+		MongoDataStore mongoDataStore = ResourceManager.getInstance().getMongoDataStore(cp);
+		super.init(mongoDataStore);
+		
+		this.userPreferencesAudit = new UserPreferencesAuditImpl(mongoDataStore.getDatabase());
 	}
 
 	public void persistUserPreferences(UserPreferences prefs) throws DAOException
@@ -48,6 +56,8 @@ public class UserPreferencesMongoDAOImpl extends AbstractDAO<UserPreferences> im
 		doc.put(USER_ID, prefs.getUserId());
 		doc.put(NV_PAIR, new BasicDBObject(prefs.getNVPair()));
 		super.getConnection().replaceOne(Filters.eq(USER_ID, prefs.getUserId()), doc, new ReplaceOptions().upsert(true));
+		
+		userPreferencesAudit.performAudit(prefs);
 	}
 
 	public UserPreferences retrieveUserPreferences(String userId) throws DAOException
