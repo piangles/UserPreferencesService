@@ -27,7 +27,7 @@ public class UserPreferencesAuditImpl implements UserPreferencesAudit
 		this.javersRepository = MongoRepository.mongoRepositoryWithDocumentDBCompatibility(mongoDb, CACHE_SIZE);
 		
 		this.javers = JaversBuilder.javers()
-							  .registerEntities(UserPreferences.class)
+							  .registerEntities(AuditableUserPreferences.class)
 							  .registerJaversRepository(javersRepository)
 							  .build();
 	}
@@ -53,7 +53,7 @@ public class UserPreferencesAuditImpl implements UserPreferencesAudit
 		CdoSnapshot snapshot = null;
 		try 
 		{
-			snapshot = javers.getLatestSnapshot(userPreferences.getUserId(), UserPreferences.class).get();
+			snapshot = javers.getLatestSnapshot(userPreferences.getUserId(), AuditableUserPreferences.class).get();
 		} 
 		catch (Exception e) 
 		{
