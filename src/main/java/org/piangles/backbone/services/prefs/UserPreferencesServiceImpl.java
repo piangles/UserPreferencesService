@@ -62,6 +62,7 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 	@Override
 	public void persistUserPreferences(String userId, UserPreferences prefs) throws UserPreferencesException
 	{
+		UserPreferences userPreferences = null;
 		try
 		{
 			logger.info("Persisting UserPreferences for : " + userId);
@@ -69,8 +70,28 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 			{
 				prefs = new UserPreferences(userId);
 			}
+			
+			logger.info("Checking if UserPreferences already exist for : " + userId);
+			//below is always guaranteed to return a value as the retrieve builds a seeding a value when null NVPair
+			userPreferences = this.retrieveUserPreferences(userId);
+			
 			for (Entry<String, Object> es: prefs.getNVPair().entrySet())
 			{
+				//when key does not already exist, add it to the NVPair
+				if (!userPreferences.getNVPair().containsKey(es.getKey()))
+				{
+					logger.info("UserPreferences already exist for : " + userId + " adding new preferences with key: " + es.getKey());
+				}
+				// already exists with same key, just update the mapping with new value
+				else
+				{
+					logger.info("UserPreferences already exist for : " + userId + " and key: " + es.getKey());
+				}
+				
+				//map-put replaces the current value for a certain key, below should take care of add & update cases
+				userPreferences.getNVPair().put(es.getKey(), es.getValue());
+
+				//convert lists to strings
 				if (es.getValue() instanceof Object[])
 				{
 					List<String> listAsStr = Arrays.asList((Object[])es.getValue()).stream().map(Object::toString).collect(Collectors.toList());
@@ -78,7 +99,7 @@ public final class UserPreferencesServiceImpl implements UserPreferencesService
 				}
 			}
 
-			userPreferencesDAO.persistUserPreferences(prefs);
+			userPreferencesDAO.persistUserPreferences(userPreferences);
 		}
 		catch (DAOException e)
 		{
